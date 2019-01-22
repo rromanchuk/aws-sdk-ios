@@ -1371,7 +1371,7 @@ static AWSS3TransferUtility *_defaultS3TransferUtility = nil;
         //Start the subTasks
         for(id taskIdentifier in transferUtilityMultiPartUploadTask.inProgressPartsDictionary) {
             AWSS3TransferUtilityUploadSubTask *subTask = [transferUtilityMultiPartUploadTask.inProgressPartsDictionary objectForKey:taskIdentifier];
-            AWSDDLogError(@"Starting subTask %@, taskIdentifier %@", @(subTask.taskIdentifier), @(taskIdentifier));
+            AWSDDLogError(@"Starting subTask %@, uploadID %@", @(subTask.taskIdentifier), @(subTask.uploadID));
             [subTask.sessionTask resume];
         }
         
