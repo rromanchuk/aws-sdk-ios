@@ -328,24 +328,28 @@ static AWSS3TransferUtility *_defaultS3TransferUtility = nil;
         AWSS3TransferUtility *serviceClient = [_serviceClients objectForKey:key];
         if (serviceClient) {
             return serviceClient;
+        } else {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"The service configuration is `nil`. You need to configure `Info.plist` or set `defaultServiceConfiguration` before using this method."
+                                         userInfo:nil];
         }
         
-        AWSServiceInfo *serviceInfo = [[AWSInfo defaultAWSInfo] serviceInfo:AWSInfoS3TransferUtility
-                                                                     forKey:key];
-        if (serviceInfo) {
-            AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:serviceInfo.region
-                                                                    credentialsProvider:serviceInfo.cognitoCredentialsProvider];
-            
-            NSNumber *accelerateModeEnabled = [serviceInfo.infoDictionary valueForKey:@"AccelerateModeEnabled"];
-            AWSS3TransferUtilityConfiguration *transferUtilityConfiguration = [AWSS3TransferUtilityConfiguration new];
-            transferUtilityConfiguration.accelerateModeEnabled = [accelerateModeEnabled boolValue];
-            
-            [AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:serviceConfiguration
-                                                transferUtilityConfiguration:transferUtilityConfiguration
-                                                                      forKey:key];
-        }
-        
-        return [_serviceClients objectForKey:key];
+//        AWSServiceInfo *serviceInfo = [[AWSInfo defaultAWSInfo] serviceInfo:AWSInfoS3TransferUtility
+//                                                                     forKey:key];
+//        if (serviceInfo) {
+//            AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:serviceInfo.region
+//                                                                    credentialsProvider:serviceInfo.cognitoCredentialsProvider];
+//
+//            NSNumber *accelerateModeEnabled = [serviceInfo.infoDictionary valueForKey:@"AccelerateModeEnabled"];
+//            AWSS3TransferUtilityConfiguration *transferUtilityConfiguration = [AWSS3TransferUtilityConfiguration new];
+//            transferUtilityConfiguration.accelerateModeEnabled = [accelerateModeEnabled boolValue];
+//
+//            [AWSS3TransferUtility registerS3TransferUtilityWithConfiguration:serviceConfiguration
+//                                                transferUtilityConfiguration:transferUtilityConfiguration
+//                                                                      forKey:key];
+//        }
+//
+//        return [_serviceClients objectForKey:key];
     }
 }
 
@@ -2277,7 +2281,7 @@ didCompleteWithError:(NSError *)error {
    didSendBodyData:(int64_t)bytesSent
     totalBytesSent:(int64_t)totalBytesSent
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
-    AWSDDLogVerbose(@"didSendBodyData called for task %lu", (unsigned long)task.taskIdentifier);
+    AWSDDLogError(@"didSendBodyData called for task %lu", (unsigned long)task.taskIdentifier);
     //Check if the task is an uploadTask.
     if (![task isKindOfClass:[NSURLSessionUploadTask class]]) {
         return;
