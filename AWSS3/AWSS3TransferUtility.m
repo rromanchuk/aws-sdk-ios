@@ -558,12 +558,14 @@ static AWSS3TransferUtility *_defaultS3TransferUtility = nil;
             //Get the Master MultiPart record from the Dictionary.
             AWSS3TransferUtilityMultiPartUploadTask *multiPartUploadTask = [tempMultiPartMasterTaskDictionary objectForKey:subTask.uploadID];
             if ( !multiPartUploadTask ) {
+                AWSDDLogError(@"Couldn't find the multipart upload master record. [%@] with taskNumber [%@] and status [%@]",subTask.transferID,@(subTask.taskIdentifier), @(subTask.status) );
                 //Couldn't find the multipart upload master record. Must be an orphan part record. Clean up the DB and continue.
                 [AWSS3TransferUtilityDatabaseHelper deleteTransferRequestFromDB:subTask.transferID databaseQueue:self->_databaseQueue];
                 continue;
             }
             //Check if the subTask is is already completed. If it is, add it to the completed parts list, update the progress object and go to the next iteration of the loop
-            if (subTask.status== AWSS3TransferUtilityTransferStatusCompleted ) {
+            if (subTask.status == AWSS3TransferUtilityTransferStatusCompleted ) {
+                AWSDDLogError(@"subTask is is already completed [%@] with taskNumber [%@] and status [%@]",subTask.transferID,@(subTask.taskIdentifier), @(subTask.status) );
                 [multiPartUploadTask.completedPartsDictionary setObject:subTask forKey:@(sessionTaskID)];
                 continue;
             }
