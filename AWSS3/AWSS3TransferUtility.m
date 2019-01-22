@@ -323,7 +323,7 @@ static AWSS3TransferUtility *_defaultS3TransferUtility = nil;
                         forKey:key];
 }
 
-+ (instancetype)S3TransferUtilityForKey:(NSString *)key {
++ (nullable instancetype)S3TransferUtilityForKey:(NSString *)key {
     @synchronized(self) {
         AWSS3TransferUtility *serviceClient = [_serviceClients objectForKey:key];
         if (serviceClient) {

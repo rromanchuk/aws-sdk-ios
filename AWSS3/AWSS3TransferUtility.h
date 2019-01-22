@@ -370,7 +370,7 @@ FOUNDATION_EXPORT NSString *const AWSS3TransferUtilityURLSessionDidBecomeInvalid
 
  @return An instance of the service client.
  */
-+ (instancetype)S3TransferUtilityForKey:(NSString *)key;
++ (nullable instancetype)S3TransferUtilityForKey:(NSString *)key;
 
 
 
